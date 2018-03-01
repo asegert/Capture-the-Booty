@@ -1,6 +1,6 @@
-var GameName = GameName || {};
+var Merge = Merge || {};
 
-GameName.GameState = {
+Merge.GameState = {
     create: function ()
     {
         this.board = [
@@ -14,27 +14,32 @@ GameName.GameState = {
         this.board = this.createItems(this.board);
         this.myItems = this.createItems(this.myItems);
         this.createBoard(this.board);
+        this.displayInventory(this.myItems);
+        console.log(this.myItems);
     },
     createItems(array)
     {
+        let retArray = new Array();
+        
         for(let i=0, len=array.length; i<len; i++)
         {
             //If it is a 2D array
             if(Array.isArray(array[i]))
             {
+                retArray[i] = new Array();
                 for(let j=0, len2=array[i].length; j<len2; j++)
                 {
                     let Item = new Merge.Item(this);
-                    array[i][j] = Item.init(array[i][j]);
+                    retArray[i][j] = Item.init(array[i][j]);
                 }
             }
             else
             {
                 let Item = new Merge.Item(this);
-                array[i] = Item.init(array[i]);
+                retArray[i] = Item.init(array[i]);
             }
         }
-        return array;
+        return retArray;
     },
     createBoard(board)
     {
@@ -42,10 +47,16 @@ GameName.GameState = {
         {
             for(let j=0, len2=board[i].length; j<len2; j++)
             {
-                board[i][j] = board[i][j].setSprite(35 * i, 35 * j, board[i][j].texture);
+                board[i][j].setSprite(35 * i, 35 * j, board[i][j].texture);
             }
         }
-        return board;
+    },
+    displayInventory(items)
+    {
+        for(let i=0, len=items.length; i<len; i++)
+        {
+            items[i].setSprite(500, 35 * i, items[i].texture);
+        }
     },
     update: function ()
     {

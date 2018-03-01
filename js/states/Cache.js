@@ -1,6 +1,6 @@
-var GameName = GameName || {};
+var Merge = Merge || {};
 
-GameName.CacheState = {
+Merge.CacheState = {
 
     create: function ()
     {

@@ -1,6 +1,6 @@
-var GameName = GameName || {};
+var Merge = Merge || {};
 
-GameName.BootState = {
+Merge.BootState = {
 	preload: function(){
 		this.stage.backgroundColor = '#ffffff';
 		this.load.image('loading-background', 'assets/images/loading-background.png');

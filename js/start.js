@@ -1,4 +1,4 @@
-var GameName = GameName || {};//replace with game name variable
+var Merge = Merge || {};//replace with game name variable
 
 if(Phaser.Device.ie) //Checks that internet explorer is being used
 {
@@ -21,16 +21,16 @@ else
 
 function run()
 {
-    GameName.game = new Phaser.Game(960, 640, Phaser.AUTO);
+    Merge.game = new Phaser.Game(960, 640, Phaser.AUTO);
 
-    GameName.game.state.add('Cache', GameName.CacheState);
-    GameName.game.state.add('Boot', GameName.BootState); 
-    GameName.game.state.add('Preload', GameName.PreloadState); 
-    GameName.game.state.add('Game', GameName.GameState);
-    GameName.game.state.add('Story', GameName.StoryState);
-    GameName.game.state.add('End', GameName.EndState);
+    Merge.game.state.add('Cache', Merge.CacheState);
+    Merge.game.state.add('Boot', Merge.BootState); 
+    Merge.game.state.add('Preload', Merge.PreloadState); 
+    Merge.game.state.add('Game', Merge.GameState);
+    Merge.game.state.add('Story', Merge.StoryState);
+    Merge.game.state.add('End', Merge.EndState);
 
-    GameName.game.state.start('Cache');
+    Merge.game.state.start('Cache');
 }
 /*Copyright (C) Wayside Co. - All Rights Reserved
 * Unauthorized copying of this file, via any medium is strictly prohibited

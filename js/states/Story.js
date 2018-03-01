@@ -1,6 +1,6 @@
-var GameName = GameName || {};
+var Merge = Merge || {};
 
-GameName.StoryState = {
+Merge.StoryState = {
     create: function ()
     {
         this.game.state.start('Game');

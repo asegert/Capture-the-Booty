@@ -12,7 +12,6 @@ Merge.Item = function(state) {
          this.texture = texture;
          this.next = this.getNext(texture);
          this.sprite = null;
-         
          return this;
      };
     Merge.Item.prototype.getNext = function(texture)
@@ -33,8 +32,7 @@ Merge.Item = function(state) {
         this.sprite.inputEnabled = true;
         this.sprite.events.onInputDown.add(function()
         {
-            console.log('k');
-            //check merge
+            console.log(this.checkMerge(this.state.myItems));
         }, this);
     }
     Merge.Item.prototype.checkMerge = function(myItems)
