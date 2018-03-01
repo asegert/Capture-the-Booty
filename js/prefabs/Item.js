@@ -12,6 +12,8 @@ Merge.Item = function(state) {
          this.texture = texture;
          this.next = this.getNext(texture);
          this.sprite = null;
+         this.index = this.getIndex(texture);
+         this.nextIndex = this.getIndex(this.next);
          return this;
      };
     Merge.Item.prototype.getNext = function(texture)
@@ -23,6 +25,18 @@ Merge.Item = function(state) {
             if(nextArray[i]===texture)
             {
                 return nextArray[i+1];
+            }
+        }
+    };
+    Merge.Item.prototype.getIndex = function(texture)
+    {
+        let indexArray = ['coinG', 'coinS', 'coinStackG', 'coinStackS', 'chest', 'gold', 'citrine', 'topaz', 'ruby', 'sapphire', 'emerald', 'amethyst', 'garnet', 'onyx', 'diamond'];
+        
+        for(let i = 0, len = indexArray.length; i<len; i++)
+        {
+            if(indexArray[i]===texture)
+            {
+                return i;
             }
         }
     };
@@ -69,6 +83,8 @@ Merge.Item = function(state) {
         {
             if(myItems[i].texture === this.texture)
             {
+                this.state.itemQuantity[this.index]--;
+                console.log(this.state.itemQuantity[this.index]);
                 myItemCount--;
                 myItems[i].sprite.destroy();
                 myItems.splice(i, 1);
@@ -76,6 +92,7 @@ Merge.Item = function(state) {
                 len--;
             }
         }
+        this.state.itemQuantity[this.nextIndex]++;
         this.state.addToInventory(this.next);
         this.state.removeBoardItem(this);
     };

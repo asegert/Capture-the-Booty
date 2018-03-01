@@ -3,19 +3,26 @@ var Merge = Merge || {};
 Merge.GameState = {
     create: function ()
     {
+        this.background = this.add.sprite(0, 0, 'background');
         this.board = [
                         ['coinG', 'topaz', 'citrine', 'coinS'], 
-                        ['gold', 'onyx', 'coinS', 'onyx'], 
-                        ['coinStackG', 'chest', 'diamond', 'topaz'], 
+                        ['gold', 'emerald', 'coinS', 'onyx'], 
+                        ['coinStackG', 'amethyst', 'diamond', 'ruby'], 
                         ['garnet', 'chest', 'sapphire', 'coinStackS']
                      ];
         this.myItems = ['coinG', 'coinG', 'coinS', 'coinStackG', 'coinStackS', 'chest', 'chest', 'gold'];
+         //coinG, coinS, coinStackG, coinStackS, chest, gold, citrine, topaz, ruby, sapphire, emerald, amethyst, garnet, onyx, diamond
+        this.itemQuantity = [2, 1, 1, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         
         this.board = this.createItems(this.board);
         this.myItems = this.createItems(this.myItems);
         this.createBoard(this.board);
         this.displayInventory(this.myItems);
         console.log(this.myItems);
+        this.add.button(500, 400, 'onyx', function()
+        {
+            console.log(this.checkOver());
+        }, this);
     },
     createItems(array)
     {
@@ -77,6 +84,17 @@ Merge.GameState = {
                 }
             }
         }
+    },
+    checkOver()
+    {    
+        for(let i=0, len=this.itemQuantity.length; i<len; i++)
+        {
+            if(this.itemQuantity[i] > 1)
+            {
+                return false;
+            }
+        }
+        return true;
     },
     update: function ()
     {
