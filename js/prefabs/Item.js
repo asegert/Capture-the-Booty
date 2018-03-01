@@ -25,16 +25,20 @@ Merge.Item = function(state) {
                 return nextArray[i+1];
             }
         }
-    }
+    };
     Merge.Item.prototype.setSprite = function(x, y, texture)
     {
+        if(this.sprite != null)
+        {
+            this.sprite.destroy();
+        }
         this.sprite = this.state.add.sprite(x, y, texture);
         this.sprite.inputEnabled = true;
         this.sprite.events.onInputDown.add(function()
         {
             console.log(this.checkMerge(this.state.myItems));
         }, this);
-    }
+    };
     Merge.Item.prototype.checkMerge = function(myItems)
     {
         let myItemCount = 0;
@@ -49,11 +53,30 @@ Merge.Item = function(state) {
         
         if(myItemCount > 1)
         {
+            this.executeMerge(myItems);
             return true;
         }
         else
         {
             return false;
         }
-    }
+    };
+    Merge.Item.prototype.executeMerge = function(myItems)
+    {
+        let myItemCount = 2;
+        
+        for(let i=0, len=myItems.length; i<len; i++)
+        {
+            if(myItems[i].texture === this.texture)
+            {
+                myItemCount--;
+                myItems[i].sprite.destroy();
+                myItems.splice(i, 1);
+                i--;
+                len--;
+            }
+        }
+        this.state.addToInventory(this.next);
+        this.state.removeBoardItem(this);
+    };
 }

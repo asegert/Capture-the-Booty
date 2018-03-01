@@ -9,7 +9,7 @@ Merge.GameState = {
                         ['coinStackG', 'chest', 'diamond', 'topaz'], 
                         ['garnet', 'chest', 'sapphire', 'coinStackS']
                      ];
-        this.myItems = ['coinG', 'coinS', 'coinG'];
+        this.myItems = ['coinG', 'coinG', 'coinS', 'coinStackG', 'coinStackS', 'chest', 'chest', 'gold'];
         
         this.board = this.createItems(this.board);
         this.myItems = this.createItems(this.myItems);
@@ -56,6 +56,26 @@ Merge.GameState = {
         for(let i=0, len=items.length; i<len; i++)
         {
             items[i].setSprite(500, 35 * i, items[i].texture);
+        }
+    },
+    addToInventory(newItem)
+    {
+        let Item = new Merge.Item(this);
+        this.myItems[this.myItems.length] = Item.init(newItem);
+        this.displayInventory(this.myItems);
+    },
+    removeBoardItem(item)
+    {
+        for(let i=0, len1 = this.board.length; i<len1; i++)
+        {
+            for(let j=0, len2 = this.board[i].length; j<len2; j++)
+            {
+                if(this.board[i][j] === item)
+                {
+                    this.board[i][j].sprite.destroy();
+                    this.board[i][j] = undefined;
+                }
+            }
         }
     },
     update: function ()
