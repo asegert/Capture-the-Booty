@@ -15,7 +15,7 @@ Merge.GameState = {
         this.createBoard(this.board);
         this.displayInventory(this.myItems);
         console.log(this.myItems);
-        this.add.button(500, 400, 'onyx', function()
+        this.add.button(750, 400, 'onyx', function()
         {
             console.log(this.checkOver());
             this.endRound(this.getHighest());
@@ -68,7 +68,7 @@ Merge.GameState = {
     {
         for(let i=0, len=items.length; i<len; i++)
         {
-            items[i].setSprite(500, 35 * i, items[i].texture);
+            items[i].setSprite(750, 35 * i, items[i].texture);
         }
     },
     addToInventory(newItem, made)
@@ -144,7 +144,7 @@ Merge.GameState = {
             //if diamond end???
             this.tempSprite = this.add.sprite(this.world.centerX, this.world.centerY, this.allData.Items[index].enlarged);
             this.add.tween(this.tempSprite.scale).to({x: 0.35, y: 0.35}, 2000, "Linear", true);
-            this.add.tween(this.tempSprite).to({x: 500, y: 0}, 2000, "Linear", true);
+            this.add.tween(this.tempSprite).to({x: 750, y: 0}, 2000, "Linear", true);
         }, this);
     },
     update: function ()
