@@ -13,6 +13,8 @@ Merge.GameState = {
         this.myItems = ['coinG', 'coinG', 'coinS', 'coinStackG', 'coinStackS', 'chest', 'chest', 'gold'];
          //coinG, coinS, coinStackG, coinStackS, chest, gold, citrine, topaz, ruby, sapphire, emerald, amethyst, garnet, onyx, diamond
         this.itemQuantity = [2, 1, 1, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        this.enlarged = ['coinGLarge', 'coinSLarge', 'coinStackGLarge', 'coinStackSLarge', 'chestLarge', 'goldLarge', 'citrineLarge', 'topazLarge', 'rubyLarge', 'sapphireLarge', 'emeraldLarge', 'amethystLarge', 'garnetLarge', 'onyxLarge', 'diamondLarge'];
+        this.names = ['Gold Coin', 'SilverCoin', 'Stack of Gold Coins', 'Stack of SilverCoins', 'Treasure Chest', 'Gold Bar', 'Citrine', 'Topaz Gem', 'Ruby', 'Sapphire', 'Emerald', 'Amethyst', 'Garnet', 'Onyx Gem', 'Diamond'];//articles??
         
         this.board = this.createItems(this.board);
         this.myItems = this.createItems(this.myItems);
@@ -22,6 +24,7 @@ Merge.GameState = {
         this.add.button(500, 400, 'onyx', function()
         {
             console.log(this.checkOver());
+            this.endRound(this.getHighest());
         }, this);
     },
     createItems(array)
@@ -67,8 +70,16 @@ Merge.GameState = {
     },
     addToInventory(newItem)
     {
-        let Item = new Merge.Item(this);
-        this.myItems[this.myItems.length] = Item.init(newItem);
+        if(typeof(newItem) === 'string')
+        {
+            let Item = new Merge.Item(this);
+            this.myItems[this.myItems.length] = Item.init(newItem);
+            this.myItems[this.myItems.length-1].made = true;
+        }
+        else
+        {
+            this.myItems[this.myItems.length] = newItem;
+        }
         this.displayInventory(this.myItems);
     },
     removeBoardItem(item)
@@ -95,6 +106,35 @@ Merge.GameState = {
             }
         }
         return true;
+    },
+    getHighest()
+    {
+        let topIndex = -1;
+        for(let i=0, len=this.myItems.length; i<len; i++)
+        {
+            if(this.myItems[i].index > topIndex && this.myItems[i].made)
+            {
+                topIndex = this.myItems[i].index;
+            }
+        }
+        console.log(topIndex);
+        return topIndex;
+    },
+    endRound(index)
+    {
+        emitter = this.add.emitter(960, -100, 2000);
+        emitter.makeParticles(this.enlarged, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        emitter.scale.setTo(0.5, 0.5);
+        emitter.width = 960;
+        emitter.start(true, 5000, null, 200);
+        
+        this.time.events.add(Phaser.Timer.SECOND * 5, function()
+        {
+            this.tempText=this.add.text(0, 0, `You won a ${this.names[index]}`);
+            this.tempSprite = this.add.sprite(this.world.centerX, this.world.centerY, this.enlarged[index]);
+            this.add.tween(this.tempSprite.scale).to({x: 0.35, y: 0.35}, 2000, "Linear", true);
+            this.add.tween(this.tempSprite).to({x: 500, y: 0}, 2000, "Linear", true);
+        }, this);
     },
     update: function ()
     {

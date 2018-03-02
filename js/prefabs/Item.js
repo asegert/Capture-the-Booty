@@ -14,6 +14,7 @@ Merge.Item = function(state) {
          this.sprite = null;
          this.index = this.getIndex(texture);
          this.nextIndex = this.getIndex(this.next);
+         this.made = false;
          return this;
      };
     Merge.Item.prototype.getNext = function(texture)
@@ -72,6 +73,7 @@ Merge.Item = function(state) {
         }
         else
         {
+            this.state.addToInventory(this);
             return false;
         }
     };
@@ -81,10 +83,9 @@ Merge.Item = function(state) {
         
         for(let i=0, len=myItems.length; i<len; i++)
         {
-            if(myItems[i].texture === this.texture)
+            if(myItems[i].texture === this.texture && myItemCount>0)
             {
                 this.state.itemQuantity[this.index]--;
-                console.log(this.state.itemQuantity[this.index]);
                 myItemCount--;
                 myItems[i].sprite.destroy();
                 myItems.splice(i, 1);
