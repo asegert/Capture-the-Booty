@@ -17,17 +17,24 @@ Merge.Item = function(state) {
          this.made = false;
          return this;
      };
-    Merge.Item.prototype.setSprite = function(x, y, texture)
+    Merge.Item.prototype.setSprite = function(x, y, texture, noInput)
     {
         if(this.sprite != null)
         {
             this.sprite.destroy();
         }
         this.sprite = this.state.add.sprite(x, y, texture);
-        this.sprite.inputEnabled = true;
+        this.sprite.inputEnabled = !noInput;
         this.sprite.events.onInputDown.add(function()
         {
-            console.log(this.checkMerge(this.state.myItems));
+            if(this.state.addSpace)
+            {
+                console.log(this.checkMerge(this.state.myItems));
+            }
+            else
+            {
+                console.log("Inventory Full");
+            }
         }, this);
     };
     Merge.Item.prototype.checkMerge = function(myItems)

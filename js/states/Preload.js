@@ -8,6 +8,10 @@ Merge.PreloadState = {
         this.load.setPreloadSprite(preloadProgress);
 
         this.load.image('background', 'assets/images/background_merge.png');
+        this.load.image('storyBackground', 'assets/images/main.png');
+        this.load.image('instructions', 'assets/images/instructions.png');
+        this.load.image('endBackground', 'assets/images/end.png');
+        this.load.image('start', 'assets/images/start.png');
         
         this.load.image('coinG', 'assets/images/coinG.png');
         this.load.image('coinS', 'assets/images/coinS.png');       

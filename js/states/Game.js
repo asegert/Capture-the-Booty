@@ -9,6 +9,7 @@ Merge.GameState = {
         this.allData = JSON.parse(this.game.cache.getText('mergeData'));
         this.board = this.allData.Rounds[0].Board;
         this.myItems = this.allData.Rounds[0].Inventory;
+        this.addSpace = true;
         
         this.board = this.createItems(this.board, false);
         this.myItems = this.createItems(this.myItems, true);
@@ -60,7 +61,7 @@ Merge.GameState = {
         {
             for(let j=0, len2=board[i].length; j<len2; j++)
             {
-                board[i][j].setSprite((35 * i)+200, (35 * j)+150, board[i][j].texture);
+                board[i][j].setSprite((35 * i)+200, (35 * j)+150, board[i][j].texture, false);
             }
         }
     },
@@ -68,7 +69,7 @@ Merge.GameState = {
     {
         for(let i=0, len=items.length; i<len; i++)
         {
-            items[i].setSprite(750, 35 * i, items[i].texture);
+            items[i].setSprite(750, 35 * i, items[i].texture, true);
         }
     },
     addToInventory(newItem, made)
@@ -83,6 +84,12 @@ Merge.GameState = {
         {
             this.myItems[this.myItems.length] = newItem;
         }
+        this.addSpace = false;
+        if(this.myItems.length < this.allData.Rounds[0].InventoryMax)
+        {
+            this.addSpace = true;
+        }
+            
         this.allData.Items[this.myItems[this.myItems.length-1].index].quantity++;
         this.displayInventory(this.myItems);
     },
@@ -148,8 +155,6 @@ Merge.GameState = {
     },
     inventoryCheck()
     {
-        let searchArray = new Array();
-        let addArray = new Array();
         for(let i=0, len=this.allData.Items.length; i<len; i++)
         {
             if(this.allData.Items[i].quantity > 2 && i != this.allData.Items.length-1)
@@ -159,7 +164,6 @@ Merge.GameState = {
                 {
                     if(this.myItems[j].index == i && max==3)
                     {
-                        console.log(this.myItems[j]);
                         max--;
                         this.addToInventory(this.myItems[j].next, true);
                         this.allData.Items[i].quantity--;
@@ -169,7 +173,6 @@ Merge.GameState = {
                     }
                     else if(this.myItems[j].index == i && max>0)
                     {
-                        console.log(this.myItems[j]);
                         max--;
                         this.allData.Items[i].quantity--;
                         this.myItems[j].sprite.destroy();
