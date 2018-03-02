@@ -71,6 +71,7 @@ Merge.Item = function(state) {
         }
         this.state.addToInventory(this.next, true);
         this.state.removeBoardItem(this);
+        this.state.inventoryCheck();
     };
     Merge.Item.prototype.updateQuantity = function()
     {

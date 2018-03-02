@@ -73,7 +73,6 @@ Merge.GameState = {
     },
     addToInventory(newItem, made)
     {
-        console.log(this.myItems);
         if(made)
         {
             let Item = new Merge.Item(this);
@@ -146,6 +145,41 @@ Merge.GameState = {
             this.add.tween(this.tempSprite.scale).to({x: 0.35, y: 0.35}, 2000, "Linear", true);
             this.add.tween(this.tempSprite).to({x: 750, y: 0}, 2000, "Linear", true);
         }, this);
+    },
+    inventoryCheck()
+    {
+        let searchArray = new Array();
+        let addArray = new Array();
+        for(let i=0, len=this.allData.Items.length; i<len; i++)
+        {
+            if(this.allData.Items[i].quantity > 2 && i != this.allData.Items.length-1)
+            {
+                let max = 3;
+                for(let j=0, len2=this.myItems.length; j<len2; j++)
+                {
+                    if(this.myItems[j].index == i && max==3)
+                    {
+                        console.log(this.myItems[j]);
+                        max--;
+                        this.addToInventory(this.myItems[j].next, true);
+                        this.allData.Items[i].quantity--;
+                        this.myItems[j].sprite.destroy();
+                        this.myItems.splice(j, 1);
+                        j--;
+                    }
+                    else if(this.myItems[j].index == i && max>0)
+                    {
+                        console.log(this.myItems[j]);
+                        max--;
+                        this.allData.Items[i].quantity--;
+                        this.myItems[j].sprite.destroy();
+                        this.myItems.splice(j, 1);
+                        j--;
+                        len2--;
+                    }
+                }
+            }
+        }
     },
     update: function ()
     {
