@@ -4,21 +4,14 @@ Merge.GameState = {
     create: function ()
     {
         this.background = this.add.sprite(0, 0, 'background');
-        this.board = [
-                        ['coinG', 'topaz', 'citrine', 'coinS', 'emerald'], 
-                        ['gold', 'emerald', 'coinS', 'onyx', 'topaz'], 
-                        ['coinStackG', 'amethyst', 'chest', 'ruby', 'chest'], 
-                        ['garnet', 'chest', 'sapphire', 'coinStackS', 'garnet'],
-                        ['citrine', 'amethyst', 'ruby', 'onyx', 'sapphire']
-                     ];
-        this.myItems = ['coinG', 'coinG', 'coinS', 'coinStackG', 'coinStackS', 'chest', 'chest', 'gold'];
-         //coinG, coinS, coinStackG, coinStackS, chest, gold, citrine, topaz, ruby, sapphire, emerald, amethyst, garnet, onyx, diamond
-        this.itemQuantity = [2, 1, 1, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        this.enlarged = ['coinGLarge', 'coinSLarge', 'coinStackGLarge', 'coinStackSLarge', 'chestLarge', 'goldLarge', 'citrineLarge', 'topazLarge', 'rubyLarge', 'sapphireLarge', 'emeraldLarge', 'amethystLarge', 'garnetLarge', 'onyxLarge', 'diamondLarge'];
-        this.names = ['Gold Coin', 'SilverCoin', 'Stack of Gold Coins', 'Stack of SilverCoins', 'Treasure Chest', 'Gold Bar', 'Citrine', 'Topaz Gem', 'Ruby', 'Sapphire', 'Emerald', 'Amethyst', 'Garnet', 'Onyx Gem', 'Diamond'];//articles??
+        this.boardBack = this.add.sprite(150, 100, 'board');
+        this.boardBack.alpha = 0.4;
+        this.allData = JSON.parse(this.game.cache.getText('mergeData'));
+        this.board = this.allData.Rounds[0].Board;
+        this.myItems = this.allData.Rounds[0].Inventory;
         
-        this.board = this.createItems(this.board);
-        this.myItems = this.createItems(this.myItems);
+        this.board = this.createItems(this.board, false);
+        this.myItems = this.createItems(this.myItems, true);
         this.createBoard(this.board);
         this.displayInventory(this.myItems);
         console.log(this.myItems);
@@ -28,8 +21,9 @@ Merge.GameState = {
             this.endRound(this.getHighest());
         }, this);
     },
-    createItems(array)
+    createItems(array, updateQuantity)
     {
+        console.log(updateQuantity);
         let retArray = new Array();
         
         for(let i=0, len=array.length; i<len; i++)
@@ -41,13 +35,21 @@ Merge.GameState = {
                 for(let j=0, len2=array[i].length; j<len2; j++)
                 {
                     let Item = new Merge.Item(this);
-                    retArray[i][j] = Item.init(array[i][j]);
+                    retArray[i][j] = Item.init(this.allData.Items[array[i][j]]);
+                    if(updateQuantity)
+                    {
+                        retArray[i][j].updateQuantity();
+                    }
                 }
             }
             else
             {
                 let Item = new Merge.Item(this);
-                retArray[i] = Item.init(array[i]);
+                retArray[i] = Item.init(this.allData.Items[array[i]]);
+                if(updateQuantity)
+                {
+                    retArray[i].updateQuantity();
+                }
             }
         }
         return retArray;
@@ -58,7 +60,7 @@ Merge.GameState = {
         {
             for(let j=0, len2=board[i].length; j<len2; j++)
             {
-                board[i][j].setSprite(35 * i, 35 * j, board[i][j].texture);
+                board[i][j].setSprite((35 * i)+200, (35 * j)+150, board[i][j].texture);
             }
         }
     },
@@ -69,9 +71,10 @@ Merge.GameState = {
             items[i].setSprite(500, 35 * i, items[i].texture);
         }
     },
-    addToInventory(newItem)
+    addToInventory(newItem, made)
     {
-        if(typeof(newItem) === 'string')
+        console.log(this.myItems);
+        if(made)
         {
             let Item = new Merge.Item(this);
             this.myItems[this.myItems.length] = Item.init(newItem);
@@ -81,6 +84,7 @@ Merge.GameState = {
         {
             this.myItems[this.myItems.length] = newItem;
         }
+        this.allData.Items[this.myItems[this.myItems.length-1].index].quantity++;
         this.displayInventory(this.myItems);
     },
     removeBoardItem(item)
@@ -99,9 +103,9 @@ Merge.GameState = {
     },
     checkOver()
     {    
-        for(let i=0, len=this.itemQuantity.length; i<len; i++)
+        for(let i=0, len=this.allData.Items.length; i<len; i++)
         {
-            if(this.itemQuantity[i] > 1)
+            if(this.allData.Items[i].quantity > 1)
             {
                 return false;
             }
@@ -123,17 +127,22 @@ Merge.GameState = {
     },
     endRound(index)
     {
+        let emitArray = new Array();
+        for(let i=0, len = this.allData.Items.length; i<len; i++)
+        {
+            emitArray[emitArray.length] = this.allData.Items[i].enlarged;
+        }
         emitter = this.add.emitter(960, -100, 2000);
-        emitter.makeParticles(this.enlarged, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        emitter.makeParticles(emitArray, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
         emitter.scale.setTo(0.5, 0.5);
         emitter.width = 960;
         emitter.start(true, 5000, null, 200);
         
         this.time.events.add(Phaser.Timer.SECOND * 5, function()
         {
-            this.tempText=this.add.text(0, 0, `You won a ${this.names[index]}`);
+            this.tempText=this.add.text(0, 0, `You won a ${this.allData.Items[index].name}`);
             //if diamond end???
-            this.tempSprite = this.add.sprite(this.world.centerX, this.world.centerY, this.enlarged[index]);
+            this.tempSprite = this.add.sprite(this.world.centerX, this.world.centerY, this.allData.Items[index].enlarged);
             this.add.tween(this.tempSprite.scale).to({x: 0.35, y: 0.35}, 2000, "Linear", true);
             this.add.tween(this.tempSprite).to({x: 500, y: 0}, 2000, "Linear", true);
         }, this);

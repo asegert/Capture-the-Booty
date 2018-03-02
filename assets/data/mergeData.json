@@ -1,0 +1,152 @@
+{
+    "Rounds": [
+        {
+            "Board": [
+                        [1, 7, 6, 0, 10], 
+                        [4, 10, 0, 13, 7], 
+                        [3, 11, 5, 8, 5], 
+                        [12, 5, 9, 2, 12],
+                        [6, 11, 8, 13, 9]
+                     ],
+            "Inventory": [1, 1, 0, 3, 2, 5, 5, 4]
+        }
+    ],
+    "Items": [
+        {
+            "name": "Silver Coin",
+            "texture": "coinS",
+            "enlarged": "coinSLarge",
+            "article": "a ",
+            "quantity": 0,
+            "nextIndex": 1,
+            "index": 0
+        },
+        {
+            "name": "Gold Coin",
+            "texture": "coinG",
+            "enlarged": "coinGLarge",
+            "article": "a ",
+            "quantity": 0,
+            "nextIndex": 2,
+            "index": 1
+        },
+        {
+            "name": "Silver Coin Stack",
+            "texture": "coinStackS",
+            "enlarged": "coinStackSLarge",
+            "article": "a ",
+            "quantity": 0,
+            "nextIndex": 3,
+            "index": 2
+        },
+        {
+            "name": "Gold Coin Stack",
+            "texture": "coinStackG",
+            "enlarged": "coinStackGLarge",
+            "article": "a ",
+            "quantity": 0,
+            "nextIndex": 4,
+            "index": 3
+        },
+        {
+            "name": "Gold Bar",
+            "texture": "gold",
+            "enlarged": "goldLarge",
+            "article": "a ",
+            "next": "chest",
+            "quantity": 0,
+            "nextIndex": 5,
+            "index": 4
+        },
+        {
+            "name": "Tresure Chest",
+            "texture": "chest",
+            "enlarged": "chestLarge",
+            "article": "a ",
+            "quantity": 0,
+            "nextIndex": 6,
+            "index": 5
+        },
+        {
+            "name": "Citrine",
+            "texture": "citrine",
+            "enlarged": "citrineLarge",
+            "article": "a ",
+            "quantity": 0,
+            "nextIndex": 7,
+            "index": 6
+        },
+        {
+            "name": "Topaz",
+            "texture": "topaz",
+            "enlarged": "topazLarge",
+            "article": "",
+            "quantity": 0,
+            "nextIndex": 8,
+            "index": 7
+        },
+        {
+            "name": "Ruby",
+            "texture": "ruby",
+            "enlarged": "rubyLarge",
+            "article": "a ",
+            "quantity": 0,
+            "nextIndex": 9,
+            "index": 8
+        },
+        {
+            "name": "Sapphire",
+            "texture": "sapphire",
+            "enlarged": "sapphireLarge",
+            "article": "a ",
+            "quantity": 0,
+            "nextIndex": 10,
+            "index": 9
+        },
+        {
+            "name": "Emerald",
+            "texture": "emerald",
+            "enlarged": "emeraldLarge",
+            "article": "an ",
+            "quantity": 0,
+            "nextIndex": 11,
+            "index": 10
+        },
+        {
+            "name": "Amethyst",
+            "texture": "amethyst",
+            "enlarged": "amethystLarge",
+            "article": "an ",
+            "quantity": 0,
+            "nextIndex": 12,
+            "index": 11
+        },
+        {
+            "name": "Garnet",
+            "texture": "garnet",
+            "enlarged": "garnetLarge",
+            "article": "a ",
+            "quantity": 0,
+            "nextIndex": 13,
+            "index": 12
+        },
+        {
+            "name": "Onyx",
+            "texture": "onyx",
+            "enlarged": "onyxLarge",
+            "article": "",
+            "quantity": 0,
+            "nextIndex": 14,
+            "index": 13
+        },
+        {
+            "name": "Diamond",
+            "texture": "diamond",
+            "enlarged": "diamondLarge",
+            "article": "a ",
+            "quantity": 0,
+            "nextIndex": null,
+            "index": 14
+        }
+    ]
+}

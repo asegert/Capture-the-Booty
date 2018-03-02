@@ -40,6 +40,10 @@ Merge.PreloadState = {
         this.load.image('sapphireLarge', 'assets/images/sapphireLarge.png');
         this.load.image('topazLarge', 'assets/images/topazLarge.png');      
         this.load.image('diamondLarge', 'assets/images/diamondLarge.png');
+        
+        this.load.image('board', 'assets/images/board.png');
+        
+        this.load.text('mergeData', 'assets/data/mergeData.json');
     },
     create: function ()
     {

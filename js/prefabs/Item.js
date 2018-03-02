@@ -7,40 +7,16 @@ Merge.Item = function(state) {
      this.state = state;
      this.game = state.game; 
      
-     Merge.Item.prototype.init = function(texture)
+     Merge.Item.prototype.init = function(data)
      {
-         this.texture = texture;
-         this.next = this.getNext(texture);
+         this.texture = data.texture;
+         this.next = this.state.allData.Items[data.nextIndex];
          this.sprite = null;
-         this.index = this.getIndex(texture);
-         this.nextIndex = this.getIndex(this.next);
+         this.index = data.index;
+         this.nextIndex = data.nextIndex;
          this.made = false;
          return this;
      };
-    Merge.Item.prototype.getNext = function(texture)
-    {
-        let nextArray = ['coinG', 'coinS', 'coinStackG', 'coinStackS', 'chest', 'gold', 'citrine', 'topaz', 'ruby', 'sapphire', 'emerald', 'amethyst', 'garnet', 'onyx', 'diamond'];
-        
-        for(let i = 0, len = nextArray.length; i<len; i++)
-        {
-            if(nextArray[i]===texture)
-            {
-                return nextArray[i+1];
-            }
-        }
-    };
-    Merge.Item.prototype.getIndex = function(texture)
-    {
-        let indexArray = ['coinG', 'coinS', 'coinStackG', 'coinStackS', 'chest', 'gold', 'citrine', 'topaz', 'ruby', 'sapphire', 'emerald', 'amethyst', 'garnet', 'onyx', 'diamond'];
-        
-        for(let i = 0, len = indexArray.length; i<len; i++)
-        {
-            if(indexArray[i]===texture)
-            {
-                return i;
-            }
-        }
-    };
     Merge.Item.prototype.setSprite = function(x, y, texture)
     {
         if(this.sprite != null)
@@ -73,7 +49,7 @@ Merge.Item = function(state) {
         }
         else
         {
-            this.state.addToInventory(this);
+            this.state.addToInventory(this, false);
             return false;
         }
     };
@@ -85,7 +61,7 @@ Merge.Item = function(state) {
         {
             if(myItems[i].texture === this.texture && myItemCount>0)
             {
-                this.state.itemQuantity[this.index]--;
+                this.state.allData.Items[this.index].quantity--;
                 myItemCount--;
                 myItems[i].sprite.destroy();
                 myItems.splice(i, 1);
@@ -93,8 +69,15 @@ Merge.Item = function(state) {
                 len--;
             }
         }
-        this.state.itemQuantity[this.nextIndex]++;
-        this.state.addToInventory(this.next);
+        this.state.addToInventory(this.next, true);
         this.state.removeBoardItem(this);
+    };
+    Merge.Item.prototype.updateQuantity = function()
+    {
+        this.state.allData.Items[this.index].quantity++;
+    };
+    Merge.Item.prototype.getQuantity = function()
+    {
+        return this.state.allData.Items[this.index].quantity;
     };
 }
