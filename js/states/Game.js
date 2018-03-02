@@ -5,10 +5,11 @@ Merge.GameState = {
     {
         this.background = this.add.sprite(0, 0, 'background');
         this.board = [
-                        ['coinG', 'topaz', 'citrine', 'coinS'], 
-                        ['gold', 'emerald', 'coinS', 'onyx'], 
-                        ['coinStackG', 'amethyst', 'diamond', 'ruby'], 
-                        ['garnet', 'chest', 'sapphire', 'coinStackS']
+                        ['coinG', 'topaz', 'citrine', 'coinS', 'emerald'], 
+                        ['gold', 'emerald', 'coinS', 'onyx', 'topaz'], 
+                        ['coinStackG', 'amethyst', 'chest', 'ruby', 'chest'], 
+                        ['garnet', 'chest', 'sapphire', 'coinStackS', 'garnet'],
+                        ['citrine', 'amethyst', 'ruby', 'onyx', 'sapphire']
                      ];
         this.myItems = ['coinG', 'coinG', 'coinS', 'coinStackG', 'coinStackS', 'chest', 'chest', 'gold'];
          //coinG, coinS, coinStackG, coinStackS, chest, gold, citrine, topaz, ruby, sapphire, emerald, amethyst, garnet, onyx, diamond
@@ -131,6 +132,7 @@ Merge.GameState = {
         this.time.events.add(Phaser.Timer.SECOND * 5, function()
         {
             this.tempText=this.add.text(0, 0, `You won a ${this.names[index]}`);
+            //if diamond end???
             this.tempSprite = this.add.sprite(this.world.centerX, this.world.centerY, this.enlarged[index]);
             this.add.tween(this.tempSprite.scale).to({x: 0.35, y: 0.35}, 2000, "Linear", true);
             this.add.tween(this.tempSprite).to({x: 500, y: 0}, 2000, "Linear", true);
