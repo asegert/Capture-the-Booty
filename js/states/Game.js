@@ -150,7 +150,11 @@ Merge.GameState = {
             //if diamond end???
             this.tempSprite = this.add.sprite(this.world.centerX, this.world.centerY, this.allData.Items[index].enlarged);
             this.add.tween(this.tempSprite.scale).to({x: 0.35, y: 0.35}, 2000, "Linear", true);
-            this.add.tween(this.tempSprite).to({x: 750, y: 0}, 2000, "Linear", true);
+            let lastTween = this.add.tween(this.tempSprite).to({x: 750, y: 0}, 2000, "Linear", true);
+            lastTween.onComplete.add(function()
+            {
+                this.goToEnd();
+            }, this);
         }, this);
     },
     inventoryCheck()
@@ -183,6 +187,16 @@ Merge.GameState = {
                 }
             }
         }
+    },
+    goToEnd()
+    {
+        this.end = this.add.sprite(0, -640, 'endBackground');
+        this.add.tween(this.background).to({y: 640}, 2000, "Linear", true);
+        this.lastTween = this.add.tween(this.end).to({y: 0}, 2000, "Linear", true);
+        this.lastTween.onComplete.add(function()
+        {
+            this.game.state.start('End');
+        }, this);
     },
     update: function ()
     {

@@ -3,7 +3,7 @@ var Merge = Merge || {};
 Merge.EndState = {
     create: function ()
     {
-        
+        this.add.sprite(0, 0, 'endBackground');
     }
 };
 /*Copyright (C) Wayside Co. - All Rights Reserved
