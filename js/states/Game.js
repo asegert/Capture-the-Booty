@@ -2,7 +2,7 @@ var Merge = Merge || {};
 
 Merge.GameState = {
     create: function ()
-    {
+    {        
         this.background = this.add.sprite(0, 0, 'background');
         this.boardBack = this.add.sprite(150, 100, 'board');
         this.boardBack.alpha = 0.4;
@@ -16,7 +16,11 @@ Merge.GameState = {
         this.createBoard(this.board);
         this.createInventory();
         this.displayInventory(this.myItems);
-        console.log(this.myItems);
+        this.add.button(0, 0, 'hint', function()
+        {
+            this.hintMap = this.add.sprite(80, 50, 'hintInfo');
+            this.continue
+        }, this);
         this.add.button(750, 400, 'onyx', function()
         {
             console.log(this.checkOver());
