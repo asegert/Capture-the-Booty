@@ -7,11 +7,13 @@ Merge.GameState = {
         this.boardBack = this.add.sprite(150, 100, 'board');
         this.boardBack.alpha = 0.4;
         this.allData = JSON.parse(this.game.cache.getText('mergeData'));
-        this.board = this.allData.Rounds[0].Board;
-        this.myItems = this.allData.Rounds[0].Inventory;
-        this.addSpace = true;
         this.currentRound = 0;
         this.totalRounds = this.allData.Rounds.length;
+        this.board = this.allData.Rounds[this.currentRound].Board;
+        this.myItems = this.allData.Rounds[this.currentRound].Inventory;
+        this.addSpace = true;
+        this.ending = false;
+        this.inventoryObjects = this.add.group();
         
         this.board = this.createItems(this.board, false);
         this.myItems = this.createItems(this.myItems, true);
@@ -64,6 +66,7 @@ Merge.GameState = {
                 }
             }
         }
+        console.log(retArray);
         return retArray;
     },
     createBoard(board)
@@ -78,9 +81,9 @@ Merge.GameState = {
     },
     createInventory()
     {
-        for(let i=0, len=this.allData.Rounds[0].InventoryMax; i<len; i++)
+        for(let i=0, len=this.allData.Rounds[this.currentRound].InventoryMax; i<len; i++)
         {
-            this.add.sprite(780, 80 * i, 'inventoryItem');
+            this.inventoryObjects.add(this.add.sprite(780, 80 * i, 'inventoryItem'));
         }
     },
     displayInventory(items)
@@ -92,6 +95,7 @@ Merge.GameState = {
     },
     addToInventory(newItem, made)
     {
+        console.log('reset');
         if(made)
         {
             let Item = new Merge.Item(this);
@@ -103,7 +107,7 @@ Merge.GameState = {
             this.myItems[this.myItems.length] = newItem;
         }
         this.addSpace = false;
-        if(this.myItems.length < this.allData.Rounds[0].InventoryMax)
+        if(this.myItems.length < this.allData.Rounds[this.currentRound].InventoryMax)
         {
             this.addSpace = true;
         }
@@ -183,6 +187,7 @@ Merge.GameState = {
                     {
                         this.allData.Items[i].quantity = 0;
                     }
+                    this.addSpace = true;
                     this.currentRound++;
                     //Checks that the item made was not a diamond
                     if(index < this.allData.Items.length-1)
@@ -214,6 +219,30 @@ Merge.GameState = {
                         }
                     }
                 }, this);
+            }
+            else 
+            {
+                for(let i=0, len = this.myItems.length; i<len; i++)
+                {
+                    this.myItems[i].sprite.destroy();
+                    this.myItems.splice(i, i+1);
+                    i--;
+                    len--;
+                }
+                for(let i=0, len = this.allData.Items.length; i<len; i++)
+                {
+                    this.allData.Items[i].quantity = 0;
+                }
+                this.addSpace = true;
+                this.currentRound++;
+                if(this.currentRound >= this.totalRounds)
+                {
+                    this.goToEnd();
+                }
+                else
+                {
+                    this.nextRound(0);
+                }
             }
         }, this);
     },
@@ -250,7 +279,11 @@ Merge.GameState = {
     },
     nextRound(newInvItem)
     {
-        this.tempText.destroy();
+        if(this.tempText != undefined)
+        {
+            this.tempText.destroy();
+        }
+        this.ending = false;
         for(let i=0, len1 = this.board.length; i<len1; i++)
         {
             for(let j=0, len2=this.board[i].length; j<len2; j++)
@@ -268,6 +301,12 @@ Merge.GameState = {
         this.createBoard(this.board);
         this.createInventory();
         this.displayInventory(this.myItems);
+        this.inventoryObjects.forEach(function(obj)
+        {
+            obj.destroy();
+        }, this);
+        this.inventoryObjects.removeAll();
+        this.createInventory();
     },
     goToEnd()
     {
@@ -281,7 +320,15 @@ Merge.GameState = {
     },
     update: function ()
     {
-        
+        if(!this.ending && !this.addSpace)
+        {
+            this.ending = true;
+            this.inventoryCheck();
+            if(this.myItems.length === this.allData.Rounds[this.currentRound].InventoryMax)
+            {
+                this.endRound(this.getHighest());
+            }
+        }
     }
 };
 /*Copyright (C) Wayside Co. - All Rights Reserved
