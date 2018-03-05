@@ -10,6 +10,8 @@ Merge.GameState = {
         this.board = this.allData.Rounds[0].Board;
         this.myItems = this.allData.Rounds[0].Inventory;
         this.addSpace = true;
+        this.currentRound = 0;
+        this.totalRounds = this.allData.Rounds.length;
         
         this.board = this.createItems(this.board, false);
         this.myItems = this.createItems(this.myItems, true);
@@ -19,7 +21,11 @@ Merge.GameState = {
         this.add.button(0, 0, 'hint', function()
         {
             this.hintMap = this.add.sprite(80, 50, 'hintInfo');
-            this.continue
+            this.continue = this.add.button(670, 440, 'continue', function()
+            {
+                this.hintMap.destroy();
+                this.continue.destroy();
+            }, this);
         }, this);
         this.add.button(750, 400, 'onyx', function()
         {
@@ -29,11 +35,11 @@ Merge.GameState = {
     },
     createItems(array, updateQuantity)
     {
-        console.log(updateQuantity);
         let retArray = new Array();
         
         for(let i=0, len=array.length; i<len; i++)
         {
+            console.log(array[i]);
             //If it is a 2D array
             if(Array.isArray(array[i]))
             {
@@ -166,16 +172,46 @@ Merge.GameState = {
                 this.textTween = this.add.tween(this.tempText.scale).to({x: 1, y: 1}, 2000, "Linear", true);
                 this.textTween.onComplete.add(function()
                 {
+                    for(let i=0, len = this.myItems.length; i<len; i++)
+                    {
+                        this.myItems[i].sprite.destroy();
+                        this.myItems.splice(i, i+1);
+                        i--;
+                        len--;
+                    }
+                    for(let i=0, len = this.allData.Items.length; i<len; i++)
+                    {
+                        this.allData.Items[i].quantity = 0;
+                    }
+                    this.currentRound++;
                     //Checks that the item made was not a diamond
                     if(index < this.allData.Items.length-1)
                     {
                         this.tempSprite = this.add.sprite(this.world.centerX, this.world.centerY, this.allData.Items[index].enlarged);
                         this.add.tween(this.tempSprite.scale).to({x: 0.35, y: 0.35}, 2000, "Linear", true);
-                        let lastTween = this.add.tween(this.tempSprite).to({x: 750, y: 0}, 2000, "Linear", true);
+                        let lastTween = this.add.tween(this.tempSprite).to({x: 800, y: 30}, 2000, "Linear", true);
                         lastTween.onComplete.add(function()
                         {
-                            this.goToEnd();//Add check for next level -> add item to inventory
+                            if(this.currentRound >= this.totalRounds)
+                            {
+                                this.goToEnd();
+                            }
+                            else
+                            {
+                                this.nextRound(index);
+                            }
                         }, this);
+                    }
+                    else
+                    {
+                        if(this.currentRound >= this.totalRounds)
+                        {
+                            this.goToEnd();
+                        }
+                        else
+                        {
+                            this.nextRound(0);
+                        }
                     }
                 }, this);
             }
@@ -211,6 +247,27 @@ Merge.GameState = {
                 }
             }
         }
+    },
+    nextRound(newInvItem)
+    {
+        this.tempText.destroy();
+        for(let i=0, len1 = this.board.length; i<len1; i++)
+        {
+            for(let j=0, len2=this.board[i].length; j<len2; j++)
+            {
+                if(this.board[i][j]!=undefined)
+                {
+                    this.board[i][j].sprite.destroy();
+                    this.board[i][j] = null;
+                }
+            }
+        }
+        
+        this.board = this.createItems(this.allData.Rounds[this.currentRound].Board, false);
+        this.myItems = this.createItems([newInvItem], true);
+        this.createBoard(this.board);
+        this.createInventory();
+        this.displayInventory(this.myItems);
     },
     goToEnd()
     {

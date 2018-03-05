@@ -19,8 +19,8 @@ Merge.StoryState = {
             else
             {
                 this.ocean = this.add.sprite(0, 640, 'background');
-                this.add.tween(this.background).to({y: -640}, 6000, "Linear", true);
-                this.lastTween = this.add.tween(this.ocean).to({y: 0}, 6000, "Linear", true);
+                this.add.tween(this.background).to({y: -640}, 3500, "Linear", true);
+                this.lastTween = this.add.tween(this.ocean).to({y: 0}, 3500, "Linear", true);
                 let delay = 0;
                 for (var i = 0; i < 40; i++)
                 {
@@ -28,7 +28,7 @@ Merge.StoryState = {
 
                     sprite.scale.set(this.rnd.realInRange(0.1, 0.6));
 
-                    var speed = this.rnd.between(6000, 8000);
+                    var speed = this.rnd.between(2000, 4000);
 
                     this.add.tween(sprite).to({ y: -600 }, speed, Phaser.Easing.Sinusoidal.InOut, true, delay, 1000, false);
 
