@@ -14,6 +14,7 @@ Merge.GameState = {
         this.board = this.createItems(this.board, false);
         this.myItems = this.createItems(this.myItems, true);
         this.createBoard(this.board);
+        this.createInventory();
         this.displayInventory(this.myItems);
         console.log(this.myItems);
         this.add.button(750, 400, 'onyx', function()
@@ -65,11 +66,18 @@ Merge.GameState = {
             }
         }
     },
+    createInventory()
+    {
+        for(let i=0, len=this.allData.Rounds[0].InventoryMax; i<len; i++)
+        {
+            this.add.sprite(780, 80 * i, 'inventoryItem');
+        }
+    },
     displayInventory(items)
     {
         for(let i=0, len=items.length; i<len; i++)
         {
-            items[i].setSprite(750, 35 * i, items[i].texture, true);
+            items[i].setSprite(800, (80 * i) + 30, items[i].texture, true);
         }
     },
     addToInventory(newItem, made)
@@ -162,7 +170,7 @@ Merge.GameState = {
                         let lastTween = this.add.tween(this.tempSprite).to({x: 750, y: 0}, 2000, "Linear", true);
                         lastTween.onComplete.add(function()
                         {
-                            this.goToEnd();
+                            this.goToEnd();//Add check for next level -> add item to inventory
                         }, this);
                     }
                 }, this);

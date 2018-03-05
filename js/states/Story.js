@@ -10,6 +10,10 @@ Merge.StoryState = {
             {
                 this.background.loadTexture('instructions');
             }
+            else if(this.background.key === 'instructions')
+            {
+                this.background.loadTexture('instructions2');
+            }
             else
             {
                 this.ocean = this.add.sprite(0, 640, 'background');
