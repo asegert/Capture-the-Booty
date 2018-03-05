@@ -146,15 +146,27 @@ Merge.GameState = {
         
         this.time.events.add(Phaser.Timer.SECOND * 5, function()
         {
-            this.tempText=this.add.text(0, 0, `You won a ${this.allData.Items[index].name}`);
-            //if diamond end???
-            this.tempSprite = this.add.sprite(this.world.centerX, this.world.centerY, this.allData.Items[index].enlarged);
-            this.add.tween(this.tempSprite.scale).to({x: 0.35, y: 0.35}, 2000, "Linear", true);
-            let lastTween = this.add.tween(this.tempSprite).to({x: 750, y: 0}, 2000, "Linear", true);
-            lastTween.onComplete.add(function()
+            //Checks that an item was made
+            if(index > 0)
             {
-                this.goToEnd();
-            }, this);
+                this.tempText=this.add.text(0, 0, `You won a ${this.allData.Items[index].name}`);
+                this.tempText.scale.setTo(0.5, 0.5);
+                this.textTween = this.add.tween(this.tempText.scale).to({x: 1, y: 1}, 2000, "Linear", true);
+                this.textTween.onComplete.add(function()
+                {
+                    //Checks that the item made was not a diamond
+                    if(index < this.allData.Items.length-1)
+                    {
+                        this.tempSprite = this.add.sprite(this.world.centerX, this.world.centerY, this.allData.Items[index].enlarged);
+                        this.add.tween(this.tempSprite.scale).to({x: 0.35, y: 0.35}, 2000, "Linear", true);
+                        let lastTween = this.add.tween(this.tempSprite).to({x: 750, y: 0}, 2000, "Linear", true);
+                        lastTween.onComplete.add(function()
+                        {
+                            this.goToEnd();
+                        }, this);
+                    }
+                }, this);
+            }
         }, this);
     },
     inventoryCheck()
