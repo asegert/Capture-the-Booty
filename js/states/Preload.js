@@ -56,12 +56,13 @@ Merge.PreloadState = {
         this.load.image('inventoryItem', 'assets/images/inventoryItem.png');
         this.load.image('bubble', 'assets/images/bubble.png');
         this.load.image('gemPile', 'assets/images/gem_pile.png');
+        this.load.image('coupon', 'assets/images/Merge_coupon.jpg');
         
         this.load.text('mergeData', 'assets/data/mergeData.json');
     },
     create: function ()
     {
-        this.state.start('Story');
+        this.state.start('End');
     }
 };
 /*Copyright (C) Wayside Co. - All Rights Reserved
