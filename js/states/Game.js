@@ -35,6 +35,13 @@ Merge.GameState = {
         this.displayInventory(this.myItems);
         let hint = this.add.button(0, 0, 'hint', function()
         {
+            Merge.Music.volume = 0.6;
+            let laugh = this.add.audio('pirateLaugh');
+            laugh.play();
+            laugh.onStop.add(function()
+            {
+                Merge.Music.volume = 1;
+            }, this);
             //Display the hint panel and a button to close it
             this.hintMap = this.add.sprite(80, 50, 'hintInfo');
             this.continue = this.add.button(670, 440, 'continue', function()
@@ -193,6 +200,18 @@ Merge.GameState = {
         emitter.scale.setTo(0.5, 0.5);
         emitter.width = 960;
         emitter.start(true, 5000, null, 200);
+        //Clear the board
+        for(let i=0, len1 = this.board.length; i<len1; i++)
+        {
+            for(let j=0, len2=this.board[i].length; j<len2; j++)
+            {
+                if(this.board[i][j]!=undefined)
+                {
+                    this.board[i][j].sprite.destroy();
+                    this.board[i][j] = null;
+                }
+            }
+        }
         //Once emitter completes
         this.time.events.add(Phaser.Timer.SECOND * 5, function()
         {
@@ -370,18 +389,6 @@ Merge.GameState = {
         }
         //We are no longer in the process of ending
         this.ending = false;
-        //Clear the board
-        for(let i=0, len1 = this.board.length; i<len1; i++)
-        {
-            for(let j=0, len2=this.board[i].length; j<len2; j++)
-            {
-                if(this.board[i][j]!=undefined)
-                {
-                    this.board[i][j].sprite.destroy();
-                    this.board[i][j] = null;
-                }
-            }
-        }
         //Inititalize the new board
         this.board = this.createItems(this.allData.Rounds[this.currentRound].Board, false);
         //Initialize the new inventory
@@ -406,6 +413,13 @@ Merge.GameState = {
         this.end = this.add.sprite(0, -640, 'endBackground');
         this.add.tween(this.background).to({y: 640}, 5000, "Linear", true);
         this.lastTween = this.add.tween(this.end).to({y: 0}, 5000, "Linear", true);
+        Merge.Music.volume = 0.6;
+        let surf = this.add.audio('surfacing');
+        surf.play();
+        surf.onStop.add(function()
+        {
+            Merge.Music.volume = 1;
+        }, this);
         //Bubble effect
         let delay = 0;
         for(var i = 0; i < 10; i++)

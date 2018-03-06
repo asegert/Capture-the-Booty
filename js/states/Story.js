@@ -3,6 +3,9 @@ var Merge = Merge || {};
 Merge.StoryState = {
     create: function ()
     {
+        //Start Audio
+        Merge.Music = this.add.audio('pirates');
+        Merge.Music.play('', 0, 1, true);
         //Background
         this.background = this.add.sprite(0, 0, 'storyBackground');
         //Start button
@@ -29,6 +32,13 @@ Merge.StoryState = {
                 this.add.tween(this.background).to({y: -640}, 3500, "Linear", true);
                 //Move the game screen to top
                 this.lastTween = this.add.tween(this.ocean).to({y: 0}, 3500, "Linear", true);
+                Merge.Music.volume = 0.6;
+                let sink = this.add.audio('sinking');
+                sink.play();
+                sink.onStop.add(function()
+                {
+                    Merge.Music.volume = 1;
+                }, this);
                 //Bubble effect
                 let delay = 0;
                 for (var i = 0; i < 40; i++)

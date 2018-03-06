@@ -57,7 +57,12 @@ Merge.PreloadState = {
         this.load.image('bubble', 'assets/images/bubble.png');
         this.load.image('gemPile', 'assets/images/gem_pile.png');
         this.load.image('coupon', 'assets/images/Merge_coupon.jpg');
-        
+        //Audio
+        this.load.audio('pirates', ['assets/audio/pirates.mp3', 'assets/audio/pirates.m4a', 'assets/audio/pirates.ogg']);
+        this.load.audio('pirateLaugh', ['assets/audio/pirateLaugh.mp3', 'assets/audio/pirateLaugh.m4a', 'assets/audio/pirateLaugh.ogg']);
+        this.load.audio('sinking', ['assets/audio/bubblesSinking.mp3', 'assets/audio/bubblesSinking.m4a', 'assets/audio/bubblesSinking.ogg']);
+        this.load.audio('surfacing', ['assets/audio/bubblesSurfacing.mp3', 'assets/audio/bubblesSurfacing.m4a', 'assets/audio/bubblesSurfacing.ogg']);
+        //Data
         this.load.text('mergeData', 'assets/data/mergeData.json');
     },
     create: function ()
