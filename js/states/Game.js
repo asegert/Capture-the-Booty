@@ -172,7 +172,24 @@ Merge.GameState = {
             //Checks that an item was made
             if(index > 0)
             {
-                this.tempText=this.add.text(0, 0, `You won a ${this.allData.Items[index].name}`);
+                let madeItems = new Array();
+                for(let i=0, len=this.myItems.length; i<len; i++)
+                {
+                    if(this.myItems[i].made)
+                    {
+                        madeItems[madeItems.length] = this.myItems[i];
+                    }
+                }
+                let text="";
+                for(let i=0, len=madeItems.length; i<len; i++)
+                {
+                    if(i===len-1)
+                    {
+                        text+=" and";
+                    }
+                    text+=`, ${madeItems[i].getName(true)}`;
+                }
+                this.tempText=this.add.text(0, 0, `You won a ${text}`);
                 this.tempText.scale.setTo(0.5, 0.5);
                 this.textTween = this.add.tween(this.tempText.scale).to({x: 1, y: 1}, 2000, "Linear", true);
                 this.textTween.onComplete.add(function()

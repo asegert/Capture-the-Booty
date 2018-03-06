@@ -88,4 +88,15 @@ Merge.Item = function(state) {
     {
         return this.state.allData.Items[this.index].quantity;
     };
+    Merge.Item.prototype.getName = function(addArticle)
+    {
+        if(addArticle)
+        {
+            return `${this.state.allData.Items[this.index].article}${this.state.allData.Items[this.index].name}`;
+        }
+        else
+        {
+            return `${this.state.allData.Items[this.index].name}`;
+        }
+    };
 }
