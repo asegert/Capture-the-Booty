@@ -15,6 +15,7 @@ Merge.Item = function(state) {
          this.index = data.index;
          this.nextIndex = data.nextIndex;
          this.made = false;
+         this.enlarged = data.enlarged;
          return this;
      };
     Merge.Item.prototype.setSprite = function(x, y, texture, noInput)

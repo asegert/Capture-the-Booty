@@ -55,6 +55,7 @@ Merge.PreloadState = {
         //Other
         this.load.image('inventoryItem', 'assets/images/inventoryItem.png');
         this.load.image('bubble', 'assets/images/bubble.png');
+        this.load.image('gemPile', 'assets/images/gem_pile.png');
         
         this.load.text('mergeData', 'assets/data/mergeData.json');
     },

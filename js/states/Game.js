@@ -32,7 +32,6 @@ Merge.GameState = {
         himt.scale.setTo(0.5, 0.5);
         this.add.button(750, 400, 'onyx', function()
         {
-            console.log(this.checkOver());
             this.endRound(this.getHighest());
         }, this);
     },
@@ -42,7 +41,6 @@ Merge.GameState = {
         
         for(let i=0, len=array.length; i<len; i++)
         {
-            console.log(array[i]);
             //If it is a 2D array
             if(Array.isArray(array[i]))
             {
@@ -67,7 +65,6 @@ Merge.GameState = {
                 }
             }
         }
-        console.log(retArray);
         return retArray;
     },
     createBoard(board)
@@ -96,7 +93,6 @@ Merge.GameState = {
     },
     addToInventory(newItem, made)
     {
-        console.log('reset');
         if(made)
         {
             let Item = new Merge.Item(this);
@@ -172,6 +168,7 @@ Merge.GameState = {
             //Checks that an item was made
             if(index > 0)
             {
+                //Checks which items were created and places them into an array
                 let madeItems = new Array();
                 for(let i=0, len=this.myItems.length; i<len; i++)
                 {
@@ -180,20 +177,41 @@ Merge.GameState = {
                         madeItems[madeItems.length] = this.myItems[i];
                     }
                 }
+                console.log(madeItems);
+                //Any items in inventory and created by the player are now 'won'
                 let text="";
+                let gems = this.add.group();
                 for(let i=0, len=madeItems.length; i<len; i++)
                 {
                     if(i===len-1)
                     {
                         text+=" and";
                     }
-                    text+=`, ${madeItems[i].getName(true)}`;
+                    if(i!=0)
+                    {
+                        text+=", ";
+                    }
+                    text+=` ${madeItems[i].getName(true)}`;
+                    if(1%2===0)
+                    {
+                        gems.add(this.add.sprite(this.world.centerX + 50 + (50 * i), this.world.centerY, madeItems[i].enlarged));
+                    }
+                    else
+                    {
+                        gems.add(this.add.sprite(this.world.centerX + 50 - (50 * i), this.world.centerY, madeItems[i].enlarged));
+                    }
                 }
-                this.tempText=this.add.text(0, 0, `You won a ${text}`);
+                let pileSprite = this.add.sprite(this.world.centerX, this.world.centerY + 10, 'gemPile');
+                pileSprite.anchor.setTo(0.5, 0.5);
+                this.world.bringToTop(gems);
+                
+                this.tempText=this.add.text(0, 0, `You won ${text}`);
                 this.tempText.scale.setTo(0.5, 0.5);
                 this.textTween = this.add.tween(this.tempText.scale).to({x: 1, y: 1}, 2000, "Linear", true);
                 this.textTween.onComplete.add(function()
                 {
+                    pileSprite.destroy();
+                    gems.destroy();
                     for(let i=0, len = this.myItems.length; i<len; i++)
                     {
                         this.myItems[i].sprite.destroy();
