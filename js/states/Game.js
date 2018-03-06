@@ -3,25 +3,39 @@ var Merge = Merge || {};
 Merge.GameState = {
     create: function ()
     {        
+        //Background
         this.background = this.add.sprite(0, 0, 'background');
+        //Pirate flag board
         this.boardBack = this.add.sprite(150, 100, 'board');
         this.boardBack.alpha = 0.4;
+        //Data from JSON
         this.allData = JSON.parse(this.game.cache.getText('mergeData'));
+        //Stores current round and max rounds
         this.currentRound = 0;
         this.totalRounds = this.allData.Rounds.length;
+        //Stores the board array
         this.board = this.allData.Rounds[this.currentRound].Board;
+        //Stores the inventory items
         this.myItems = this.allData.Rounds[this.currentRound].Inventory;
+        //If there is more space to add to in the inventory
         this.addSpace = true;
+        //If the game is auto ending
         this.ending = false;
+        //Stores the inventory chests
         this.inventoryObjects = this.add.group();
-        
+        //Create the items for the board
         this.board = this.createItems(this.board, false);
+        //Create the items for the inventory
         this.myItems = this.createItems(this.myItems, true);
+        //Set up the board
         this.createBoard(this.board);
+        //Create the inventory
         this.createInventory();
+        //Display the inventory
         this.displayInventory(this.myItems);
-        let himt = this.add.button(0, 0, 'hint', function()
+        let hint = this.add.button(0, 0, 'hint', function()
         {
+            //Display the hint panel and a button to close it
             this.hintMap = this.add.sprite(80, 50, 'hintInfo');
             this.continue = this.add.button(670, 440, 'continue', function()
             {
@@ -29,7 +43,7 @@ Merge.GameState = {
                 this.continue.destroy();
             }, this);
         }, this);
-        himt.scale.setTo(0.5, 0.5);
+        //Ends the game
         this.add.button(750, 400, 'onyx', function()
         {
             this.endRound(this.getHighest());
@@ -37,6 +51,7 @@ Merge.GameState = {
     },
     createItems(array, updateQuantity)
     {
+        //Return Array
         let retArray = new Array();
         
         for(let i=0, len=array.length; i<len; i++)
@@ -49,6 +64,7 @@ Merge.GameState = {
                 {
                     let Item = new Merge.Item(this);
                     retArray[i][j] = Item.init(this.allData.Items[array[i][j]]);
+                    //If the quantity needs updated -> if it is an inventory item
                     if(updateQuantity)
                     {
                         retArray[i][j].updateQuantity();
@@ -65,10 +81,12 @@ Merge.GameState = {
                 }
             }
         }
+        //Return the array of items
         return retArray;
     },
     createBoard(board)
     {
+        //Create the sprites for the board
         for(let i=0, len1=board.length; i<len1; i++)
         {
             for(let j=0, len2=board[i].length; j<len2; j++)
@@ -79,6 +97,7 @@ Merge.GameState = {
     },
     createInventory()
     {
+        //Create the chest sprites for the inventory
         for(let i=0, len=this.allData.Rounds[this.currentRound].InventoryMax; i<len; i++)
         {
             this.inventoryObjects.add(this.add.sprite(780, 80 * i, 'inventoryItem'));
@@ -86,6 +105,7 @@ Merge.GameState = {
     },
     displayInventory(items)
     {
+        //Create the sprites for the inventory items
         for(let i=0, len=items.length; i<len; i++)
         {
             items[i].setSprite(800, (80 * i) + 30, items[i].texture, true);
@@ -93,27 +113,35 @@ Merge.GameState = {
     },
     addToInventory(newItem, made)
     {
+        //If the item was create through a player combining items
         if(made)
         {
+            //Create a new item
             let Item = new Merge.Item(this);
+            //Add it to the inventory
             this.myItems[this.myItems.length] = Item.init(newItem);
+            //Set made to true
             this.myItems[this.myItems.length-1].made = true;
         }
         else
         {
+            //If it does not make a new item simply add the item to the inventory
             this.myItems[this.myItems.length] = newItem;
         }
+        //It is not possible to add more unless space still exists in the inventory
         this.addSpace = false;
         if(this.myItems.length < this.allData.Rounds[this.currentRound].InventoryMax)
         {
             this.addSpace = true;
         }
-            
+        //Update the inventory quantity   
         this.allData.Items[this.myItems[this.myItems.length-1].index].quantity++;
+        //Display the inventory with the new item
         this.displayInventory(this.myItems);
     },
     removeBoardItem(item)
     {
+        //Find the item and remove the sprite and the data from the board
         for(let i=0, len1 = this.board.length; i<len1; i++)
         {
             for(let j=0, len2 = this.board[i].length; j<len2; j++)
@@ -128,6 +156,7 @@ Merge.GameState = {
     },
     checkOver()
     {    
+        //If there are no items in the inventory that can be combined to free up space return true
         for(let i=0, len=this.allData.Items.length; i<len; i++)
         {
             if(this.allData.Items[i].quantity > 1)
@@ -139,6 +168,7 @@ Merge.GameState = {
     },
     getHighest()
     {
+        //Find the highest item index in the inventory
         let topIndex = -1;
         for(let i=0, len=this.myItems.length; i<len; i++)
         {
@@ -147,12 +177,13 @@ Merge.GameState = {
                 topIndex = this.myItems[i].index;
             }
         }
-        console.log(topIndex);
         return topIndex;
     },
     endRound(index)
     {
+        //index == the highest index in the inventory
         let emitArray = new Array();
+        //Create an emitter using the large images for all the treasures
         for(let i=0, len = this.allData.Items.length; i<len; i++)
         {
             emitArray[emitArray.length] = this.allData.Items[i].enlarged;
@@ -162,7 +193,7 @@ Merge.GameState = {
         emitter.scale.setTo(0.5, 0.5);
         emitter.width = 960;
         emitter.start(true, 5000, null, 200);
-        
+        //Once emitter completes
         this.time.events.add(Phaser.Timer.SECOND * 5, function()
         {
             //Checks that an item was made
@@ -177,21 +208,21 @@ Merge.GameState = {
                         madeItems[madeItems.length] = this.myItems[i];
                     }
                 }
-                console.log(madeItems);
                 //Any items in inventory and created by the player are now 'won'
                 let text="";
                 let gems = this.add.group();
                 for(let i=0, len=madeItems.length; i<len; i++)
                 {
-                    if(i===len-1)
+                    if(i===len-1 && i!=0)
                     {
                         text+=" and";
                     }
                     if(i!=0)
                     {
-                        text+=", ";
+                        text+=",";
                     }
                     text+=` ${madeItems[i].getName(true)}`;
+                    //Seperate the gems that are even/odd to make it look more evenly spaced
                     if(1%2===0)
                     {
                         gems.add(this.add.sprite(this.world.centerX + 50 + (50 * i), this.world.centerY, madeItems[i].enlarged));
@@ -201,17 +232,20 @@ Merge.GameState = {
                         gems.add(this.add.sprite(this.world.centerX + 50 - (50 * i), this.world.centerY, madeItems[i].enlarged));
                     }
                 }
+                //Show the gems
                 let pileSprite = this.add.sprite(this.world.centerX, this.world.centerY + 10, 'gemPile');
                 pileSprite.anchor.setTo(0.5, 0.5);
                 this.world.bringToTop(gems);
-                
-                this.tempText=this.add.text(0, 0, `You won ${text}`);
+                //Tween to show the text of the treasures that were won
+                this.tempText=this.add.text(0, 0, `You won${text}`);
                 this.tempText.scale.setTo(0.5, 0.5);
                 this.textTween = this.add.tween(this.tempText.scale).to({x: 1, y: 1}, 2000, "Linear", true);
                 this.textTween.onComplete.add(function()
                 {
+                    //Destroy the gem images
                     pileSprite.destroy();
                     gems.destroy();
+                    //Clear the inventory
                     for(let i=0, len = this.myItems.length; i<len; i++)
                     {
                         this.myItems[i].sprite.destroy();
@@ -219,30 +253,40 @@ Merge.GameState = {
                         i--;
                         len--;
                     }
+                    //Clear the item quantities
                     for(let i=0, len = this.allData.Items.length; i<len; i++)
                     {
                         this.allData.Items[i].quantity = 0;
                     }
+                    //There is now space to fill
                     this.addSpace = true;
+                    //The next round is beginning
                     this.currentRound++;
                     //Checks that the item made was not a diamond
                     if(index < this.allData.Items.length-1)
                     {
+                        //If an item is to be added to the inventory for the next round add it via this tween
+                        //Takes the largest treasure created
                         this.tempSprite = this.add.sprite(this.world.centerX, this.world.centerY, this.allData.Items[index].enlarged);
                         this.add.tween(this.tempSprite.scale).to({x: 0.35, y: 0.35}, 2000, "Linear", true);
                         let lastTween = this.add.tween(this.tempSprite).to({x: 800, y: 30}, 2000, "Linear", true);
                         lastTween.onComplete.add(function()
                         {
+                            //If there are no more rounds end the game, otherwise start the next round
                             if(this.currentRound >= this.totalRounds)
                             {
                                 this.goToEnd();
                             }
                             else
                             {
+                                //Remove the temporary inventory image
+                                this.tempSprite.destroy();
+                                //Index is the next item to add to the inventory
                                 this.nextRound(index);
                             }
                         }, this);
                     }
+                    //If a diamond was made
                     else
                     {
                         if(this.currentRound >= this.totalRounds)
@@ -251,11 +295,13 @@ Merge.GameState = {
                         }
                         else
                         {
+                            //There is no item to add to inventory so add the lowest option
                             this.nextRound(0);
                         }
                     }
                 }, this);
             }
+            //If no items were created by the player
             else 
             {
                 for(let i=0, len = this.myItems.length; i<len; i++)
@@ -284,6 +330,7 @@ Merge.GameState = {
     },
     inventoryCheck()
     {
+        //If the inventory has 3 of the same item the three will be removed and replaced with the upgraded item
         for(let i=0, len=this.allData.Items.length; i<len; i++)
         {
             if(this.allData.Items[i].quantity > 2 && i != this.allData.Items.length-1)
@@ -315,11 +362,15 @@ Merge.GameState = {
     },
     nextRound(newInvItem)
     {
+        //NewInvItem is the inventory item that the round will start with
+        //If there is a temporary text it will be removed
         if(this.tempText != undefined)
         {
             this.tempText.destroy();
         }
+        //We are no longer in the process of ending
         this.ending = false;
+        //Clear the board
         for(let i=0, len1 = this.board.length; i<len1; i++)
         {
             for(let j=0, len2=this.board[i].length; j<len2; j++)
@@ -331,12 +382,17 @@ Merge.GameState = {
                 }
             }
         }
-        
+        //Inititalize the new board
         this.board = this.createItems(this.allData.Rounds[this.currentRound].Board, false);
+        //Initialize the new inventory
         this.myItems = this.createItems([newInvItem], true);
+        //Create the new board
         this.createBoard(this.board);
+        //Create the new Inventory
         this.createInventory();
+        //Display the inventory
         this.displayInventory(this.myItems);
+        //Remove the old chests and display the new ones
         this.inventoryObjects.forEach(function(obj)
         {
             obj.destroy();
@@ -346,15 +402,38 @@ Merge.GameState = {
     },
     goToEnd()
     {
+        //Add the ending background above the current one
         this.end = this.add.sprite(0, -640, 'endBackground');
-        this.add.tween(this.background).to({y: 640}, 2000, "Linear", true);
-        this.lastTween = this.add.tween(this.end).to({y: 0}, 2000, "Linear", true);
+        this.add.tween(this.background).to({y: 640}, 5000, "Linear", true);
+        this.lastTween = this.add.tween(this.end).to({y: 0}, 5000, "Linear", true);
+        //Bubble effect
+        let delay = 0;
+        for(var i = 0; i < 10; i++)
+        {
+            var sprite = this.add.sprite(-100 + (this.world.randomX), 0, 'bubble');
+            sprite.scale.set(this.rnd.realInRange(0.1, 0.6));
+            var speed = this.rnd.between(500, 1000);
+            this.floatTween(sprite, speed);
+        }
         this.lastTween.onComplete.add(function()
         {
             this.game.state.start('End');
         }, this);
     },
-    update: function ()
+    floatTween(sprite, speed)
+    {
+        //Bubble effect, is a function for individual descent
+        var delay = 0;
+        let floatTween = this.add.tween(sprite).to({ y: 600 }, speed, Phaser.Easing.Sinusoidal.InOut);
+            floatTween.onComplete.add(function()
+            {
+                delay += 1;
+                sprite.y=(delay*130);
+                floatTween.start();
+            }, this);
+            floatTween.start();
+    },
+    update()
     {
         if(!this.ending && !this.addSpace)
         {

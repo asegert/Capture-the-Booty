@@ -18,7 +18,7 @@ Merge.PreloadState = {
         //Buttons
         this.load.image('start', 'assets/images/buttons/startButton.png');
         this.load.image('yes', 'assets/images/buttons/yesButton.png');
-        this.load.image('hint', 'assets/images/hint.png');
+        this.load.image('hint', 'assets/images/buttons/hintButton.png');
         this.load.image('continue', 'assets/images/buttons/continueButton.png');
         //Gems
         this.load.image('coinG', 'assets/images/treasures/coinG.png');
@@ -62,7 +62,7 @@ Merge.PreloadState = {
     },
     create: function ()
     {
-        this.state.start('End');
+        this.state.start('Story');
     }
 };
 /*Copyright (C) Wayside Co. - All Rights Reserved
