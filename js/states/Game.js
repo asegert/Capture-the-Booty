@@ -20,7 +20,7 @@ Merge.GameState = {
         this.createBoard(this.board);
         this.createInventory();
         this.displayInventory(this.myItems);
-        this.add.button(0, 0, 'hint', function()
+        let himt = this.add.button(0, 0, 'hint', function()
         {
             this.hintMap = this.add.sprite(80, 50, 'hintInfo');
             this.continue = this.add.button(670, 440, 'continue', function()
@@ -29,6 +29,7 @@ Merge.GameState = {
                 this.continue.destroy();
             }, this);
         }, this);
+        himt.scale.setTo(0.5, 0.5);
         this.add.button(750, 400, 'onyx', function()
         {
             console.log(this.checkOver());
