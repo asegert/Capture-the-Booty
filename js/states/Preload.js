@@ -20,6 +20,7 @@ Merge.PreloadState = {
         this.load.image('yes', 'assets/images/buttons/yesButton.png');
         this.load.image('hint', 'assets/images/buttons/hintButton.png');
         this.load.image('continue', 'assets/images/buttons/continueButton.png');
+        this.load.image('endRound', 'assets/images/buttons/roundButton.png');
         //Gems
         this.load.image('coinG', 'assets/images/treasures/coinG.png');
         this.load.image('coinS', 'assets/images/treasures/coinS.png');       
@@ -64,6 +65,22 @@ Merge.PreloadState = {
         this.load.audio('surfacing', ['assets/audio/bubblesSurfacing.mp3', 'assets/audio/bubblesSurfacing.m4a', 'assets/audio/bubblesSurfacing.ogg']);
         //Data
         this.load.text('mergeData', 'assets/data/mergeData.json');
+        
+        /*
+        JSON
+        Rounds: Holds round objects
+            Board: A 2D array with the indices of the items to be displayed on the board
+            Inventory: An array holdingthe items to be in the inventory when the game begins, the array is empty after the first round as the game fills it anyway
+            InventoryMax: Thee maximum number of slots in the inventory
+        Items: An array of objects containing data on all treasure types
+            name: The name of the item, used for display purposes
+            texture: The image associated with the item
+            enlarged: The larger texture, used for round end screen
+            article: The article associated with the name of the treasure used in text
+            quantity: The number of the item in the inventory, default is 0
+            nextIndex: The item index of the item this one will upgrade to
+            index: The index of this item in this array
+        */
     },
     create: function ()
     {

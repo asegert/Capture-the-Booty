@@ -51,7 +51,7 @@ Merge.GameState = {
             }, this);
         }, this);
         //Ends the game
-        this.add.button(750, 400, 'onyx', function()
+        this.add.button(600, 500, 'endRound', function()
         {
             this.endRound(this.getHighest());
         }, this);
