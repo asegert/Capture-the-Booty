@@ -256,8 +256,9 @@ Merge.GameState = {
                 pileSprite.anchor.setTo(0.5, 0.5);
                 this.world.bringToTop(gems);
                 //Tween to show the text of the treasures that were won
-                this.tempText=this.add.text(0, 0, `You won${text}`);
+                this.tempText=this.add.text(this.world.centerX, this.world.centerY, `You won${text}`, {fill: '#FF0000', font: '50px'});
                 this.tempText.scale.setTo(0.5, 0.5);
+                this.tempText.anchor.setTo(0.5, 0.5);
                 this.textTween = this.add.tween(this.tempText.scale).to({x: 1, y: 1}, 2000, "Linear", true);
                 this.textTween.onComplete.add(function()
                 {
